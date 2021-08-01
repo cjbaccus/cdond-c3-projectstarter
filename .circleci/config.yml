@@ -212,7 +212,7 @@ jobs:
           paths:
             - .circleci/ansible/inventory
       # Here's where you will add some code to rollback on failure
-      - destroy-environment     
+      #- destroy-environment     
 
   configure-infrastructure:
     docker:
@@ -220,7 +220,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["17:96:e2:d9:35:5d:5d:b5:80:64:fb:0c:15:9c:82:b7"]
+          fingerprints: ["5d:df:0d:87:b1:d7:ef:88:bf:89:64:e5:37:53:75:65"]
       - attach_workspace:
           at: .
       - run:
@@ -240,7 +240,7 @@ jobs:
             ls -la
             cat inventory
             ansible-playbook -i inventory configure-server.yml
-      - destroy-environment        
+      #- destroy-environment        
 
 #   run-migrations:
 #     docker:
