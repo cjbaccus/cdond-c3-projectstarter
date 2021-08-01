@@ -305,6 +305,7 @@ jobs:
             # your code here
             export API_URL=$(curl -H "token: 91b68998-2d69-4b31-93c2-4f3f42925a80" --request GET https://api.memstash.io/values/BACKEND_URL)
             echo "${API_URL}"
+            npm install -g npm@latest
             npm run build
       - run:
           name: Deploy frontend objects
@@ -319,22 +320,38 @@ jobs:
       - revert-migrations     
       - destroy-environment 
                     
-#   deploy-backend:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Deploy backend
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  deploy-backend:
+    docker:
+      - image: python:3.9.0-alpine
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["44:d1:f0:b5:a1:df:17:11:0c:01:5c:e6:03:a1:86:53"]
+      - attach_workspace:
+          at: .
+    
+      - run:
+          name: Install dependencies
+          working_directory: ./.circleci/ansible
+          command: |
+            apk add --update ansible curl rsync openssh nodejs npm
+            ansible --version
+            pip3 install --upgrade pip
+            pip3 install awscli
+            aws --version 
+            export ANSIBLE_HOST_KEY_CHECKING=False
+      - run:
+          name: Deploy backend
+          working_directory: ./.circleci/ansible          
+          command: |
+            export ANSIBLE_HOST_KEY_CHECKING=False 
+            export host_key_checking=False
+            export record_host_keys=False
+            cat inventory
+            ansible-playbook -i inventory deploy-backend.yml -vv
+      # Here's where you will add some code to rollback on failure
+      - revert-migrations
+      - destroy-environment
 
 #   smoke-test:
 #     docker:
@@ -420,8 +437,8 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
       # - cloudfront-update:
