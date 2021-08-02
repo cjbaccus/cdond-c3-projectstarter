@@ -320,6 +320,7 @@ jobs:
           command: |
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             aws s3 cp ./dist s3://udapeople-"<< pipeline.parameters.workflow-id >>" --recursive
 =======
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
@@ -327,6 +328,9 @@ jobs:
 =======
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
 >>>>>>> parent of 983c7b6 (took quotes out of s3 cp statement)
+=======
+            aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+>>>>>>> 8eea4d9919fd57d7894459f76eba3d37d7f2f092
       - persist_to_workspace:
           root: .
           paths:
