@@ -343,11 +343,7 @@ jobs:
     
       - run:
           name: Install dependencies
-<<<<<<< HEAD
           working_directory: ./.circleci/ansible 
-=======
-          working_directory: ./.circleci/ansible
->>>>>>> parent of 983c7b6 (took quotes out of s3 cp statement)
           command: |
             apk add --update ansible curl rsync openssh nodejs npm
             ansible --version
