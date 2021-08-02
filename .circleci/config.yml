@@ -223,15 +223,29 @@ jobs:
           fingerprints: ["5d:df:0d:87:b1:d7:ef:88:bf:89:64:e5:37:53:75:65"]
       - attach_workspace:
           at: .
+      - run: mkdir -p .circleci/ansible/roles/configure-server/files/backend
       - run:
           name: Install dependencies
           working_directory: ./.circleci/ansible
           command: |
             apk add --update ansible
+            apk add tar gzip
             ansible --version
             pip3 install --upgrade pip
             pip3 install awscli
             aws --version
+      - run:
+          name: Write env vars
+          command: |
+            cd backend
+            echo "NODE_ENV=production > env
+            echo "TYPEORM_CONNECTION=$TYPEORM_CONNECTION" >> env
+            echo "TYPEORM_ENTITIES=$TYPEORM_ENTITIES" >> env
+            echo "TYPEORM_HOST=$TYPEORM_HOST" >> env
+            echo "TYPEORM_PORT=$TYPEORM_PORT" >> env
+            echo "TYPEORM_USERNAME=$TYPEORM_USERNAME" >> env
+            echo "TYPEORM_PASSWORD=$TYPEORM_PASSWORD" >> env
+            echo "TYPEORM_DATABASE=$TYPEORM_DATABASE" >> env
       - run:
           name: Configure server
           working_directory: ./.circleci/ansible
@@ -239,6 +253,8 @@ jobs:
             pwd &&
             ls -la
             cat inventory
+            cp -rv backend/* .circleci/ansible/roles/configure-server/files/backend
+            ls .circleci/ansible/roles/configure-server/files/backend
             ansible-playbook -i inventory configure-server.yml
       - destroy-environment        
 
