@@ -297,6 +297,7 @@ jobs:
             apk add --no-cache npm
             apk add --no-cache bash
             apk add --no-cache curl
+            pip install --upgrade pip
             pip install awscli
             # sudo apt-get update && sudo apt-get install -yy less
             # sudo apt-get install unzip -y
@@ -307,9 +308,10 @@ jobs:
           name: Get backend url
           working_directory: ./frontend
           command: |
-            # your code here
+            npm install
             export API_URL=$(curl -H "token: 91b68998-2d69-4b31-93c2-4f3f42925a80" --request GET https://api.memstash.io/values/BACKEND_URL)
             echo "${API_URL}"
+            npm install -g webpack webpack-cli
             npm install -g npm@latest
             npm run build
       - run:
