@@ -307,7 +307,6 @@ jobs:
             echo "${API_URL}"
             sudo npm install -g webpack webpack-cli
             sudo npm install -g npm@latest
-            sudo npm install -g npm@latest
             sudo npm run build
       - run:
           name: Deploy frontend objects
@@ -319,8 +318,8 @@ jobs:
           paths:
             - frontend/dist
       # Here's where you will add some code to rollback on failure
-      #- revert-migrations     
-      #- destroy-environment 
+      - revert-migrations     
+      - destroy-environment 
                     
   deploy-backend:
     docker:
