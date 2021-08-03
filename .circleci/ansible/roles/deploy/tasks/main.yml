@@ -5,7 +5,7 @@
   - name: "copy backend binaries"
     become: yes
     synchronize:
-      src: ~./backend/dist
+      src: /home/backend.tar.gz
       dest: /home/ubuntu/uda_app
       recursive: true
 
@@ -23,7 +23,17 @@
 
   - name: "start server"
     become: true
-    command: pm2 start -f ./main.js
+    command: |
+          cd /home/ubuntu/
+          tar xzvf backend.tar.gz
+          mv home/circleci/project/backend .
+          cd backend
+          sudo npm install -g npm@latest
+          sudo npm install -g webpack-dev-server
+          sudo npm install
+          sudo npm run build
+          sudo pm2 start npm --name backend -- start
+          pm2 start -f ./main.js
     args:
       chdir: /home/ubuntu/uda_app/dist
     environment:
