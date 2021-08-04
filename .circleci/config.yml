@@ -212,7 +212,7 @@ jobs:
           paths:
             - .circleci/ansible/inventory
       # Here's where you will add some code to rollback on failure
-      - destroy-environment     
+      #- destroy-environment     
 
   configure-infrastructure:
     docker:
@@ -240,7 +240,7 @@ jobs:
             ls -la
             cat inventory
             ansible-playbook -i inventory configure-server.yml
-      - destroy-environment        
+      #- destroy-environment        
 
   run-migrations:
     docker:
@@ -279,7 +279,7 @@ jobs:
             fi
             echo "WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}"
      # Here's where you will add some code to rollback on failure 
-      - destroy-environment      
+      #- destroy-environment      
 
   deploy-frontend:
     docker:
@@ -318,8 +318,8 @@ jobs:
           paths:
             - frontend/dist
       # Here's where you will add some code to rollback on failure
-      - revert-migrations     
-      - destroy-environment 
+      #- revert-migrations     
+      #- destroy-environment 
                     
   deploy-backend:
     docker:
@@ -351,8 +351,8 @@ jobs:
             cat inventory
             ansible-playbook -i inventory deploy-backend.yml -vv
       # Here's where you will add some code to rollback on failure
-      - revert-migrations
-      - destroy-environment
+      #- revert-migrations
+      #- destroy-environment
 
 #   smoke-test:
 #     docker:
