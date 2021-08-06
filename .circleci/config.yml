@@ -265,6 +265,7 @@ jobs:
             npm install
             npm run migrations > migration_status
             echo migration_status
+            wc -l migration_status
       - run:
           name: Send migration results to memstash
           working_directory: ./backend
